@@ -1,0 +1,11 @@
+//------------------------------------------------------------
+// = TYPOGRAPHY
+//------------------------------------------------------------
+@mixin fontsize($size:1, $line: $size * 1.5) {
+  font-size: $size + rem;
+  line-height: $line + rem;
+}
+
+%fs14 {
+  @include fontsize(1.4);
+}

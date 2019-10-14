@@ -1,0 +1,18 @@
+# Editor & IDE #
+.idea
+.vs
+
+# Development #
+node_modules
+*.css.map
+
+# OS Generated Files #
+Thumbs.db
+.DS_Store
+.cache
+Desktop.ini
+
+# Packages #
+*.7z
+*.zip
+*.rar
