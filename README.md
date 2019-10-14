@@ -13,7 +13,7 @@ After you install necessary packages you can run the project.
 
 ### Development Server
 Step 1 : `set node_env=dev`\
-Step 2 : `gulp`\
+Step 2 : `gulp`
 
 ### Production
 Step 1 : `set node_env=prod`\
