@@ -12,13 +12,15 @@ First clone or download this repository. Then run `npm install`.
 After you install necessary packages you can run the project.
 
 ### Development Server with compile
-`gulp`
+Step 1 : `set node_env=dev`
+Step 2 : `gulp`
 
 ### Development Server with out compile
-`gulp watch`
+Step 1 : `gulp watch`
 
 ### Clean All .map files
-`gulp cleanmap`
+Step 1 : `gulp cleanmap`
 
 ### Production
-`gulp build`
+Step 1 : `set node_env=prod`
+Step 2 : `gulp build`

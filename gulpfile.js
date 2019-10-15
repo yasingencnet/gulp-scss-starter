@@ -24,14 +24,7 @@ const paths = {
 };
 
 // Set env value
-function productionEnvironment(done) {
-    const env = 'prod';
-    done();
-}
-function developmentEnvironment(done) {
-    const env = 'dev';
-    done();
-}
+var env = process.env.NODE_ENV || "dev" ;
 
 //------------------------------------------------------------
 // = TASKS
@@ -121,8 +114,8 @@ function watchFiles(done) {
 }
 
 const watch = gulp.series(browserSyncInit, watchFiles);
-const build = gulp.series(productionEnvironment, gulp.parallel(scriptsLib, scripts, scss), cleanMap);
-const develop = gulp.series(developmentEnvironment, gulp.parallel(scriptsLib, scripts, scss), watch);
+const build = gulp.series(gulp.parallel(scriptsLib, scripts, scss), cleanMap);
+const develop = gulp.series(gulp.parallel(scriptsLib, scripts, scss), watch);
 
 exports.cleanmap = cleanMap;
 exports.watch = watch;
