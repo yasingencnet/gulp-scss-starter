@@ -24,7 +24,7 @@ const paths = {
 };
 
 // Set env value
-var env = process.env.NODE_ENV || "dev" ;
+var env = process.env.NODE_ENV || 'dev';
 
 //------------------------------------------------------------
 // = TASKS
