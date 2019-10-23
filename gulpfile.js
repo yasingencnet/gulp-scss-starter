@@ -41,9 +41,8 @@ function browserSyncInit(done) {
 }
 
 // BrowserSync Reload
-function browserSyncReload(done) {
+function browserSyncReload() {
   browserSync.reload();
-  done();
 }
 
 // Clean
