@@ -14,7 +14,7 @@
     "gulp-uglify-es": "latest"
   },
   "dependencies": {
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "bootstrap": "^4.3.1",
     "popper.js": "latest"
   },
