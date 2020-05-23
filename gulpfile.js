@@ -1,20 +1,21 @@
 const gulp = require('gulp'), // Gulp
-  concat = require('gulp-concat'), // Concat multiple files
-  gulpif = require('gulp-if'), // If statements
-  clean = require('gulp-clean'), // Remove files and folders
-  sourcemaps = require('gulp-sourcemaps'), // Inline sourcemaps in dev mode
-  sass = require('gulp-sass'), // SCSS compiler
-  autoprefixer = require('gulp-autoprefixer'), // Add browser prefixes
-  uglify = require('gulp-uglify-es').default, // JS minify (ES6 Supported)
-  browserSync = require('browser-sync').create(); // Synchronised browser testing
+    concat = require('gulp-concat'), // Concat multiple files
+    gulpif = require('gulp-if'), // If statements
+    clean = require('gulp-clean'), // Remove files and folders
+    sourcemaps = require('gulp-sourcemaps'), // Inline sourcemaps in dev mode
+    sass = require('gulp-sass'), // SCSS compiler
+    autoprefixer = require('gulp-autoprefixer'), // Add browser prefixes
+    uglify = require('gulp-uglify-es').default, // JS minify (ES6 Supported)
+    babel = require('gulp-babel'),
+    browserSync = require('browser-sync').create(); // Synchronised browser testing
 
 // File Paths
 const jsPaths = 'app/assets/js/',
-  jsLibPaths = 'app/assets/js/lib/',
-  scssPath = 'app/assets/scss/',
-  cssPath = 'app/assets/css/',
-  htmlPath = 'app/**/*.html',
-  mapsPath = 'app/assets/**/*/*.map';
+    jsLibPaths = 'app/assets/js/lib/',
+    scssPath = 'app/assets/scss/',
+    cssPath = 'app/assets/css/',
+    htmlPath = 'app/**/*.html',
+    mapsPath = 'app/assets/**/*/*.map';
 
 // JS Paths
 const paths = {
@@ -48,55 +49,43 @@ function browserSyncReload() {
 // Clean
 function cleanMap(done) {
   gulp
-    .src(mapsPath, {
-      read: false
-    })
-    .pipe(clean());
-  done();
-}
-
-// Scripts Lib
-function scriptsLib(done) {
-  gulp
-    .src(paths.scriptsLib)
-    .pipe(gulpif(env === 'dev', sourcemaps.init({ largeFile: true })))
-    .pipe(gulpif(env === 'prod', uglify()))
-    .pipe(concat('lib.min.js'))
-    .pipe(gulpif(env === 'dev', sourcemaps.write('/')))
-    .pipe(gulp.dest(jsPaths))
-    .pipe(browserSync.stream());
+      .src(mapsPath, {
+        read: false
+      })
+      .pipe(clean());
   done();
 }
 
 // Scripts
 function scripts(done) {
   gulp
-    .src(paths.scripts)
-    .pipe(gulpif(env === 'dev', sourcemaps.init({ largeFile: true })))
-    .pipe(gulpif(env === 'prod', uglify()))
-    .pipe(concat('core.min.js'))
-    .pipe(gulpif(env === 'dev', sourcemaps.write('/')))
-    .pipe(gulp.dest(jsPaths))
-    .pipe(browserSync.stream());
+      .src(paths.scripts)
+      .pipe(gulpif(env === 'dev', sourcemaps.init({ largeFile: true })))
+      .pipe(babel({presets: ['@babel/preset-env']}))
+      .pipe(gulpif(env === 'prod', uglify()))
+      .pipe(concat('core.min.js'))
+      .pipe(gulpif(env === 'dev', sourcemaps.write('/')))
+      .pipe(gulp.dest(jsPaths))
+      .pipe(browserSync.stream());
   done();
 }
 
 // SCSS
 function scss(done) {
   gulp
-    .src(paths.scss)
-    .pipe(gulpif(env === 'dev', sourcemaps.init({ largeFile: true })))
-    .pipe(
-      gulpif(
-        env === 'prod',
-        sass({ outputStyle: 'compressed' }).on('error', sass.logError)
+      .src(paths.scss)
+      .pipe(gulpif(env === 'dev', sourcemaps.init({ largeFile: true })))
+      .pipe(
+          gulpif(
+              env === 'prod',
+              sass({ outputStyle: 'compressed' }).on('error', sass.logError)
+          )
       )
-    )
-    .pipe(gulpif(env === 'dev', sass().on('error', sass.logError)))
-    .pipe(autoprefixer())
-    .pipe(gulpif(env === 'dev', sourcemaps.write('/')))
-    .pipe(gulp.dest(cssPath))
-    .pipe(browserSync.stream());
+      .pipe(gulpif(env === 'dev', sass().on('error', sass.logError)))
+      .pipe(autoprefixer())
+      .pipe(gulpif(env === 'dev', sourcemaps.write('/')))
+      .pipe(gulp.dest(cssPath))
+      .pipe(browserSync.stream());
   done();
 }
 
@@ -105,7 +94,6 @@ function scss(done) {
 //------------------------------------------------------------
 
 function watchFiles(done) {
-  gulp.watch(paths.scriptsLib, gulp.series(scriptsLib));
   gulp.watch(paths.scripts, gulp.series(scripts));
   gulp.watch(scssPath + '**/*.scss', gulp.series(scss));
   gulp.watch(htmlPath).on('change', browserSyncReload);
@@ -113,8 +101,8 @@ function watchFiles(done) {
 }
 
 const watch = gulp.series(browserSyncInit, watchFiles);
-const build = gulp.series(gulp.parallel(scriptsLib, scripts, scss), cleanMap);
-const develop = gulp.series(gulp.parallel(scriptsLib, scripts, scss), watch);
+const build = gulp.series(gulp.parallel(scripts, scss), cleanMap);
+const develop = gulp.series(gulp.parallel(scripts, scss), watch);
 
 exports.cleanmap = cleanMap;
 exports.watch = watch;

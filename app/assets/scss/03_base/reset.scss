@@ -10,13 +10,14 @@
 /* Set core defaults */
 html {
   font-size: 10px;
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
-  scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
   font-family: var(--font);
+  background-color: rgba(var(--color-bg), 1);
 }
 
 /* Remove default margin */
@@ -25,6 +26,8 @@ h1,
 h2,
 h3,
 h4,
+h5,
+h6,
 p,
 ul[class],
 ol[class],
